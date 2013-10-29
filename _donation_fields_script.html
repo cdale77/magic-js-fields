@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  // Magic NationBuilder Fields 
+  // Concept and project by Tim Wayne, Wayne Design; implementation by Brad Johnson, Democratic Direct
+  // This is a jQuery script designed to work on custom NationBuilder donation page. It uses an added select box;
+  // when a user changes the select box the script will either display employer, occupation, and related fields for the
+  // user, or keep those fields hidden and fill in the input values with appropriate content. It requires some specific
+  // markup: a select#employment_status, a div#employment-fields, and a Liquid include tag to pull this script
+  // into the donate page. select#employment_status requires a default option with value == "",
+  // an option with value == "Employed". Other option values are passed directly into the NationBuilder employer
+  // and occupation input fields, and can be whatever you like. div#employment-fields is simply the div that wraps the fields
+  // to be shown when the user selects "Employed." div#employment-fields should have default style rules display: none;
+  
+  
+  (function() {
+    $(document).ready(function() {   
+      $("select#employment_status").on("change", function() {  //the function is triggered when a select box with id
+        																																						 //"employment_status" is changed. 
+        
+        var empStatus;  																											//Grab the value of the checkbox and stash it as the status.
+        empStatus = $(this).val();
+        
+        var zipCode;
+        zipCode = $("input#donation_billing_address_zip").val();
+        
+        function setFields(status) {
+            $("input#donation_employer").val(status);
+            $("input#donation_occupation").val(status);
+            $("input#donation_work_address_address1").val('NA');
+            $("input#donation_work_address_city").val('NA');
+            $("input#donation_work_address_state").val('NA');
+            $("input#donation_work_address_zip").val(zipCode);  
+        }
+        
+        function hideFields() {
+          $("div#employment-fields").css("display", "none");
+        }
+        
+        function showFields() {
+          $("div#employment-fields").css("display", "block");
+        }
+          
+        if (empStatus === 'Employed') {
+          showFields();
+        }
+        else { 
+          setFields(empStatus);
+          hideFields();
+        } 
+      });   
+    });
+  }).call(this); 
+</script>
